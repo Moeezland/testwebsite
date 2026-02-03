@@ -331,6 +331,83 @@
   background:#f4f7fb;
 }
 
+/* Deaf Accessibility Button */
+#deafBtn{
+  position:fixed;
+  left:18px;
+  bottom:18px;
+  width:56px;
+  height:56px;
+  background:#0f4ea8;
+  color:#fff;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:24px;
+  cursor:pointer;
+  z-index:9999;
+  box-shadow:0 10px 25px rgba(0,0,0,.35);
+}
+
+/* Sign Language Panel */
+#signPanel{
+  position:fixed;
+  left:18px;
+  bottom:90px;
+  width:300px;
+  background:#ffffff;
+  color:#05243a;
+  border-radius:16px;
+  box-shadow:0 30px 60px rgba(0,0,0,.35);
+  display:none;
+  flex-direction:column;
+  overflow:hidden;
+  z-index:9999;
+}
+
+.sign-header{
+  background:#0f4ea8;
+  color:white;
+  padding:12px 14px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+#signVideo{
+  width:100%;
+  height:180px;
+  background:#000;
+}
+
+#captions{
+  padding:10px 14px;
+  font-size:13px;
+  background:#f4f7fb;
+  line-height:1.5;
+}
+
+.sign-actions{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:8px;
+  padding:12px;
+}
+
+.sign-actions button{
+  padding:8px;
+  border:none;
+  border-radius:8px;
+  background:#eef2f7;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.sign-actions button:hover{
+  background:#e0e7ef;
+}
+    
 </style>
 </head>
 
@@ -595,6 +672,77 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
+<!-- Deaf Accessibility Button -->
+<div id="deafBtn" aria-label="Sign language support">🤟</div>
+
+<!-- Sign Language Panel -->
+<div id="signPanel" aria-live="polite">
+
+  <div class="sign-header">
+    <strong>Sign Language Support</strong>
+    <span id="closeSign" aria-label="Close">✕</span>
+  </div>
+
+  <video id="signVideo" controls muted playsinline>
+    <source src="signs/welcome.mp4" type="video/mp4">
+    Your browser does not support video.
+  </video>
+
+  <div id="captions">
+    Welcome to the Hereditary Monarchy of Moeezland.
+  </div>
+
+  <div class="sign-actions">
+    <button onclick="playSign('welcome')">Welcome</button>
+    <button onclick="playSign('citizenship')">Citizenship</button>
+    <button onclick="playSign('laws')">Laws</button>
+    <button onclick="playSign('contact')">Contact</button>
+  </div>
+
+</div>
+
+<script>
+const deafBtn = document.getElementById("deafBtn");
+const signPanel = document.getElementById("signPanel");
+const closeSign = document.getElementById("closeSign");
+const signVideo = document.getElementById("signVideo");
+const captions = document.getElementById("captions");
+
+deafBtn.addEventListener("click", () => {
+  signPanel.style.display = "flex";
+});
+
+closeSign.addEventListener("click", () => {
+  signPanel.style.display = "none";
+  signVideo.pause();
+});
+
+const signs = {
+  welcome: {
+    video: "signs/welcome.mp4",
+    text: "Welcome to the Hereditary Monarchy of Moeezland."
+  },
+  citizenship: {
+    video: "signs/citizenship.mp4",
+    text: "You can apply for Moeezland citizenship online through official government forms."
+  },
+  laws: {
+    video: "signs/laws.mp4",
+    text: "Moeezland operates under its national constitution and legal framework."
+  },
+  contact: {
+    video: "signs/contact.mp4",
+    text: "You may contact the Moeezland government through official channels listed on this website."
+  }
+};
+
+function playSign(key){
+  signVideo.src = signs[key].video;
+  captions.textContent = signs[key].text;
+  signVideo.play();
+}
+</script>
+  
 </body>
 </html>
 
